@@ -1,49 +1,16 @@
-name: Update README automatically
+name: Waka Readme
 
 on:
   schedule:
-    - cron: "0 */1 * * *"
+    # Runs at 12am IST
+    - cron: '30 18 * * *'
   workflow_dispatch:
-
-permissions:
-  contents: write
-
 jobs:
   update-readme:
+    name: Update Readme with Metrics
     runs-on: ubuntu-latest
-
     steps:
-      # Checkout repo
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      # Update Currently Learning section using a shell script
-      - name: Update Currently Learning
-        run: |
-          file="README.md"
-          section="currently-learning"
-          content="- TypeScript\n- React Performance Optimization\n- Express.js\n- Next.js"
-          
-          # Replace content between markers <!--START_SECTION:currently-learning--> and <!--END_SECTION:currently-learning-->
-          sed -i "/<!--START_SECTION:${section}-->/,/<!--END_SECTION:${section}-->/c<!--START_SECTION:${section}-->\n${content}\n<!--END_SECTION:${section}-->" "$file"
-
-      # Update Recent Activity section
-      - name: Update GitHub Activity
-        uses: Readme-Workflows/recent-activity@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: anmol098/waka-readme-stats@master
         with:
-          COMMIT_COUNT: 5
-          COMMIT_DAYS: 7
-          MAX_LINES: 10
-          README_FILE: README.md
-          SECTION_HEADER: "recent-activity"
-
-      # Commit changes if any
-      - name: Commit changes
-        run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add README.md
-          git diff --staged --quiet || git commit -m "📚 Update README with latest activity and learning"
-          git push
+          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
