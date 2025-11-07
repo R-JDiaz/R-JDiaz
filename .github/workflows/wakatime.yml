@@ -1,16 +1,53 @@
-name: Work Stats Readme
+name: Update README automatically
 
 on:
-  workflow_dispatch:
   schedule:
-    # Runs every 2 hours
-    - cron: "0 */2 * * *"
+    - cron: "0 */1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   update-readme:
-    name: Update this repo's README
     runs-on: ubuntu-latest
+
     steps:
-      - uses: athul/waka-readme@master 
+      # Checkout repo
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # Update Currently Learning section using a shell script
+      - name: Update Currently Learning
+        run: |
+          file="README.md"
+          section="currently-learning"
+          content="- TypeScript
+          
+- React Performance Optimization
+- Express.js
+- Next.js"
+          
+          # Replace content between markers <!--START_SECTION:currently-learning--> and <!--END_SECTION:currently-learning-->
+          sed -i -E "/<!--START_SECTION:${section}-->/,/<\!--END_SECTION:${section}-->/c\
+<!--START_SECTION:${section}-->\
+${content}\
+<!--END_SECTION:${section}-->" "$file"
+
+      # Update Recent Activity section
+      - name: Update GitHub Activity
+        uses: Readme-Workflows/recent-activity@main
         with:
-          WAKATIME_API_KEY: ${{ secrets.WAKATIME_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          limit: 5
+          file: README.md
+          section: activity
+
+      # Commit changes if any
+      - name: Commit changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Updated README automatically" || echo "No changes to commit"
+          git push
