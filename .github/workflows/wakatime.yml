@@ -22,32 +22,28 @@ jobs:
         run: |
           file="README.md"
           section="currently-learning"
-          content="- TypeScript
-          
-- React Performance Optimization
-- Express.js
-- Next.js"
+          content="- TypeScript\n- React Performance Optimization\n- Express.js\n- Next.js"
           
           # Replace content between markers <!--START_SECTION:currently-learning--> and <!--END_SECTION:currently-learning-->
-          sed -i -E "/<!--START_SECTION:${section}-->/,/<\!--END_SECTION:${section}-->/c\
-<!--START_SECTION:${section}-->\
-${content}\
-<!--END_SECTION:${section}-->" "$file"
+          sed -i "/<!--START_SECTION:${section}-->/,/<!--END_SECTION:${section}-->/c<!--START_SECTION:${section}-->\n${content}\n<!--END_SECTION:${section}-->" "$file"
 
       # Update Recent Activity section
       - name: Update GitHub Activity
         uses: Readme-Workflows/recent-activity@main
-        with:
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          limit: 5
-          file: README.md
-          section: activity
+        with:
+          COMMIT_COUNT: 5
+          COMMIT_DAYS: 7
+          MAX_LINES: 10
+          README_FILE: README.md
+          SECTION_HEADER: "recent-activity"
 
       # Commit changes if any
       - name: Commit changes
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git add README.md
-          git commit -m "Updated README automatically" || echo "No changes to commit"
+          git diff --staged --quiet || git commit -m "📚 Update README with latest activity and learning"
           git push
