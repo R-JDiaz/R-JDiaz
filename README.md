@@ -10,7 +10,7 @@
 ### 💫 About Me
 🌱 Currently exploring **Multiprocessing & Parallel Computing** for high-performance execution.  
 💬 Ask me about **Python, Java**, or even the **Word of God**(i prefer this)  
-⚡ Fun fact: I’m more into **video & photo editing**, but somehow... I end up coding after waking up 🤷‍♂️  
+⚡ Fun fact: I’m more into **video & photo editing**, but somehow... I end up in programming 🤷‍♂️  
 
 ---
 
@@ -48,13 +48,6 @@
   <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=R-JDiaz&theme=tokyonight&hide_border=false&layout=compact" alt="Top Languages"/>
 </p>
 
----
-
-<p align="center">
-  <a href="https://visitcount.itsvg.in">
-    <img src="https://visitcount.itsvg.in/api?id=R-JDiaz&icon=0&color=0" alt="Profile Visits"/>
-  </a>
-</p>
 
 ---
 
